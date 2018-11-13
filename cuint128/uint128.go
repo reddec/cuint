@@ -70,7 +70,7 @@ func (u UInt128) ToInt() *big.Int {
 
 func (u UInt128) Sign() int { return int(C.sign(C.uint128_t(u))) }
 
-func (u UInt128) Compare(x UInt128) int { return int(C.cmp(C.uint128_t(u), C.uint128(x))) }
+func (u UInt128) Compare(x UInt128) int { return int(C.cmp(C.uint128_t(u), C.uint128_t(x))) }
 
 func (u UInt128) Bytes() [16]byte { return C.uint128_t(u) }
 
