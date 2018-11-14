@@ -1,4 +1,4 @@
-package cuint128
+package cint128
 
 import (
 	"fmt"

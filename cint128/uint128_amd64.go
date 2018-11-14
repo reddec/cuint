@@ -1,4 +1,4 @@
-package cuint128
+package cint128
 
 import (
 	"encoding/binary"
@@ -7,7 +7,6 @@ import (
 
 //#include <stdint.h>
 //
-//typedef signed __int128 int128_t;
 //typedef unsigned __int128 uint128_t;
 //typedef struct hl { uint64_t hi, lo; } hl;
 //
@@ -102,5 +101,9 @@ func (u UInt128) Equal(x UInt128) bool {
 }
 
 func (u UInt128) Bytes() [16]byte { return C.uint128_t(u) }
+
+func (u *UInt128) SetBytes(bts [16]byte) {
+	*u = UInt128(C.uint128_t(bts))
+}
 
 func FromUInt64(x uint64) UInt128 { return UInt128(C.from_u64(C.uint64_t(x))) }
