@@ -1,6 +1,7 @@
 package cuint128
 
 import (
+	"encoding/binary"
 	"math/big"
 )
 
@@ -44,6 +45,8 @@ import (
 //
 import "C"
 
+var hbo = binary.LittleEndian // native binary order for amd64
+
 type UInt128 C.uint128_t
 
 func (u UInt128) Add(x UInt128) UInt128 {
@@ -70,7 +73,29 @@ func (u UInt128) ToInt() *big.Int {
 
 func (u UInt128) Sign() int { return int(C.sign(C.uint128_t(u))) }
 
-func (u UInt128) Compare(x UInt128) int { return int(C.cmp(C.uint128_t(u), C.uint128_t(x))) }
+func (u UInt128) Compare(x UInt128) int {
+	var bts = [16]byte(u)
+	var (
+		uHi = hbo.Uint64(bts[:8])
+		uLo = hbo.Uint64(bts[8:])
+	)
+
+	bts = [16]byte(x)
+	var (
+		oHi = hbo.Uint64(bts[:8])
+		oLo = hbo.Uint64(bts[8:])
+	)
+	if uHi > oHi {
+		return 1
+	} else if uHi < oHi {
+		return -1
+	} else if uLo > oLo {
+		return 1
+	} else if uLo < oLo {
+		return -1
+	}
+	return 0
+}
 
 func (u UInt128) Bytes() [16]byte { return C.uint128_t(u) }
 
