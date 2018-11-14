@@ -97,6 +97,10 @@ func (u UInt128) Compare(x UInt128) int {
 	return 0
 }
 
+func (u UInt128) Equal(x UInt128) bool {
+	return ([16]byte(u)) == ([16]byte(x))
+}
+
 func (u UInt128) Bytes() [16]byte { return C.uint128_t(u) }
 
 func FromUInt64(x uint64) UInt128 { return UInt128(C.from_u64(C.uint64_t(x))) }
